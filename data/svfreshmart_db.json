@@ -10,7 +10,7 @@
       "imageUrl": "https://images.unsplash.com/photo-1596701062351-8c2c14d1fdd0?w=600&auto=format&fit=crop&q=80",
       "isActive": true,
       "createdAt": "2026-10-15T08:00:00.000Z",
-      "updatedAt": "2026-10-15T08:00:00.000Z",
+      "updatedAt": "2026-10-18T02:16:52.060Z",
       "variations": [
         {
           "id": "var-1-1",
@@ -21,7 +21,7 @@
           "label": "50g",
           "price": 10,
           "mrp": 15,
-          "stock": 45,
+          "stock": 44,
           "isActive": true
         },
         {
@@ -72,7 +72,7 @@
       "imageUrl": "https://images.unsplash.com/photo-1508747703725-719777637510?w=600&auto=format&fit=crop&q=80",
       "isActive": true,
       "createdAt": "2026-10-15T08:00:00.000Z",
-      "updatedAt": "2026-10-15T08:00:00.000Z",
+      "updatedAt": "2026-10-18T02:16:52.060Z",
       "variations": [
         {
           "id": "var-2-1",
@@ -83,7 +83,7 @@
           "label": "500g",
           "price": 24,
           "mrp": 30,
-          "stock": 120,
+          "stock": 119,
           "isActive": true
         },
         {
@@ -134,7 +134,7 @@
       "imageUrl": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80",
       "isActive": true,
       "createdAt": "2026-10-15T08:00:00.000Z",
-      "updatedAt": "2026-10-15T08:00:00.000Z",
+      "updatedAt": "2026-10-18T02:16:52.060Z",
       "variations": [
         {
           "id": "var-3-1",
@@ -145,7 +145,7 @@
           "label": "500g",
           "price": 19,
           "mrp": 28,
-          "stock": 150,
+          "stock": 149,
           "isActive": true
         },
         {
@@ -184,7 +184,7 @@
       "imageUrl": "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600&auto=format&fit=crop&q=80",
       "isActive": true,
       "createdAt": "2026-10-15T08:00:00.000Z",
-      "updatedAt": "2026-10-15T08:00:00.000Z",
+      "updatedAt": "2026-10-18T02:16:52.060Z",
       "variations": [
         {
           "id": "var-4-1",
@@ -195,7 +195,7 @@
           "label": "500g",
           "price": 22,
           "mrp": 28,
-          "stock": 100,
+          "stock": 99,
           "isActive": true
         },
         {
@@ -296,7 +296,7 @@
       "imageUrl": "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&auto=format&fit=crop&q=80",
       "isActive": true,
       "createdAt": "2026-10-15T08:00:00.000Z",
-      "updatedAt": "2026-10-15T08:00:00.000Z",
+      "updatedAt": "2026-10-18T02:16:52.060Z",
       "variations": [
         {
           "id": "var-6-1",
@@ -307,7 +307,7 @@
           "label": "500g (3-4 pcs)",
           "price": 28,
           "mrp": 35,
-          "stock": 90,
+          "stock": 89,
           "isActive": true
         },
         {
@@ -346,7 +346,7 @@
       "imageUrl": "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600&auto=format&fit=crop&q=80",
       "isActive": true,
       "createdAt": "2026-10-15T08:00:00.000Z",
-      "updatedAt": "2026-10-15T08:00:00.000Z",
+      "updatedAt": "2026-10-18T02:16:52.060Z",
       "variations": [
         {
           "id": "var-7-1",
@@ -357,7 +357,7 @@
           "label": "2 pieces",
           "price": 65,
           "mrp": 85,
-          "stock": 50,
+          "stock": 49,
           "isActive": true
         },
         {
@@ -613,7 +613,117 @@
       ]
     }
   ],
-  "orders": [],
+  "orders": [
+    {
+      "id": "ord-1792289810839",
+      "orderNumber": "SVF-20261018-8341",
+      "customerId": "cust-demo",
+      "customerPhone": "9876543210",
+      "customerName": "Ramesh Gowda",
+      "items": [
+        {
+          "id": "item-var-1-1-1792289810835",
+          "orderId": "",
+          "productId": "prod-1",
+          "productName": "Fresh Green Chilli (ಹಸಿ ಮೆಣಸಿನಕಾಯಿ)",
+          "productImage": "https://images.unsplash.com/photo-1596701062351-8c2c14d1fdd0?w=600&auto=format&fit=crop&q=80",
+          "variationId": "var-1-1",
+          "variantSku": "SVF-CHILLI-50G",
+          "quantity": 1,
+          "unitLabel": "50g",
+          "unitPrice": 10,
+          "subtotal": 10
+        },
+        {
+          "id": "item-var-2-1-1792289810836",
+          "orderId": "",
+          "productId": "prod-2",
+          "productName": "Bangalore Pink Onion (ಈರುಳ್ಳಿ)",
+          "productImage": "https://images.unsplash.com/photo-1508747703725-719777637510?w=600&auto=format&fit=crop&q=80",
+          "variationId": "var-2-1",
+          "variantSku": "SVF-ONION-500G",
+          "quantity": 1,
+          "unitLabel": "500g",
+          "unitPrice": 24,
+          "subtotal": 24
+        },
+        {
+          "id": "item-var-3-1-1792289810836",
+          "orderId": "",
+          "productId": "prod-3",
+          "productName": "Country Hybrid Tomato (ಟೊಮೆಟೊ)",
+          "productImage": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80",
+          "variationId": "var-3-1",
+          "variantSku": "SVF-TOMATO-500G",
+          "quantity": 1,
+          "unitLabel": "500g",
+          "unitPrice": 19,
+          "subtotal": 19
+        },
+        {
+          "id": "item-var-4-1-1792289810837",
+          "orderId": "",
+          "productId": "prod-4",
+          "productName": "Hassan Fresh Potato (ಆಲೂಗಡ್ಡೆ)",
+          "productImage": "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600&auto=format&fit=crop&q=80",
+          "variationId": "var-4-1",
+          "variantSku": "SVF-POTATO-500G",
+          "quantity": 1,
+          "unitLabel": "500g",
+          "unitPrice": 22,
+          "subtotal": 22
+        },
+        {
+          "id": "item-var-6-1-1792289810837",
+          "orderId": "",
+          "productId": "prod-6",
+          "productName": "Robusta Golden Banana (ಬಾಳೆಹಣ್ಣು)",
+          "productImage": "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&auto=format&fit=crop&q=80",
+          "variationId": "var-6-1",
+          "variantSku": "SVF-BANANA-500G",
+          "quantity": 1,
+          "unitLabel": "500g (3-4 pcs)",
+          "unitPrice": 28,
+          "subtotal": 28
+        },
+        {
+          "id": "item-var-7-1-1792289810838",
+          "orderId": "",
+          "productId": "prod-7",
+          "productName": "Shimla Royal Delicious Apple (ಸೇಬು)",
+          "productImage": "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600&auto=format&fit=crop&q=80",
+          "variationId": "var-7-1",
+          "variantSku": "SVF-APPLE-2PCS",
+          "quantity": 1,
+          "unitLabel": "2 pieces",
+          "unitPrice": 65,
+          "subtotal": 65
+        }
+      ],
+      "subtotal": 168,
+      "deliveryCharge": 35,
+      "totalAmount": 203,
+      "status": "Confirmed",
+      "paymentMethod": "Cash on Delivery (Simulated)",
+      "paymentStatus": "Paid",
+      "deliveryAddress": {
+        "id": "addr-1",
+        "customerId": "cust-demo",
+        "fullName": "Ramesh Gowda",
+        "phoneNumber": "9876543210",
+        "addressLine1": "Flat 402, Green Glen Layout, Outer Ring Road",
+        "addressLine2": "Near Bellandur Flyover",
+        "landmark": "Opposite Central Mall",
+        "city": "Bangalore",
+        "pincode": "560102",
+        "isDefault": true
+      },
+      "createdAt": "2026-10-18T02:16:50.839Z",
+      "updatedAt": "2026-10-18T02:16:52.061Z",
+      "razorpayPaymentId": "pay_1792289812056",
+      "razorpayOrderId": "order_rzp_1792289810843_42"
+    }
+  ],
   "customers": [
     {
       "id": "cust-demo",
@@ -640,106 +750,51 @@
   ],
   "zones": [
     {
-      "pincode": "560034",
-      "areaName": "Koramangala",
-      "isServiceable": true,
-      "deliveryFee": 30,
-      "freeDeliveryThreshold": 399,
-      "minOrderValue": 149,
-      "estimatedHours": "Same Day (2-4 hrs)"
-    },
-    {
-      "pincode": "560038",
-      "areaName": "Indiranagar",
-      "isServiceable": true,
-      "deliveryFee": 30,
-      "freeDeliveryThreshold": 399,
-      "minOrderValue": 149,
-      "estimatedHours": "Same Day (2-4 hrs)"
-    },
-    {
-      "pincode": "560102",
-      "areaName": "HSR Layout",
-      "isServiceable": true,
-      "deliveryFee": 30,
-      "freeDeliveryThreshold": 399,
-      "minOrderValue": 149,
-      "estimatedHours": "Same Day (2-4 hrs)"
-    },
-    {
-      "pincode": "560066",
-      "areaName": "Whitefield",
-      "isServiceable": true,
-      "deliveryFee": 40,
-      "freeDeliveryThreshold": 499,
-      "minOrderValue": 199,
-      "estimatedHours": "Same Day (3-5 hrs)"
-    },
-    {
-      "pincode": "560041",
-      "areaName": "Jayanagar",
-      "isServiceable": true,
-      "deliveryFee": 30,
-      "freeDeliveryThreshold": 399,
-      "minOrderValue": 149,
-      "estimatedHours": "Same Day (2-4 hrs)"
-    },
-    {
-      "pincode": "560076",
-      "areaName": "BTM Layout",
-      "isServiceable": true,
-      "deliveryFee": 30,
-      "freeDeliveryThreshold": 399,
-      "minOrderValue": 149,
-      "estimatedHours": "Same Day (2-4 hrs)"
-    },
-    {
-      "pincode": "560037",
-      "areaName": "Marathahalli",
+      "pincode": "5600",
+      "areaName": "Sarjapur",
       "isServiceable": true,
       "deliveryFee": 35,
-      "freeDeliveryThreshold": 449,
-      "minOrderValue": 149,
-      "estimatedHours": "Same Day (3-5 hrs)"
-    },
-    {
-      "pincode": "560003",
-      "areaName": "Malleshwaram",
-      "isServiceable": true,
-      "deliveryFee": 35,
-      "freeDeliveryThreshold": 449,
-      "minOrderValue": 149,
-      "estimatedHours": "Same Day (3-5 hrs)"
-    },
-    {
-      "pincode": "560001",
-      "areaName": "MG Road / Central Bangalore",
-      "isServiceable": true,
-      "deliveryFee": 35,
-      "freeDeliveryThreshold": 449,
+      "freeDeliveryThreshold": 399,
       "minOrderValue": 149,
       "estimatedHours": "Same Day (2-4 hrs)"
-    },
-    {
-      "pincode": "560068",
-      "areaName": "Electronic City",
-      "isServiceable": true,
-      "deliveryFee": 45,
-      "freeDeliveryThreshold": 499,
-      "minOrderValue": 199,
-      "estimatedHours": "Next Morning / Same Day"
-    },
-    {
-      "pincode": "560092",
-      "areaName": "Hebbal",
-      "isServiceable": true,
-      "deliveryFee": 40,
-      "freeDeliveryThreshold": 499,
-      "minOrderValue": 199,
-      "estimatedHours": "Same Day (3-5 hrs)"
     }
   ],
   "auditLogs": [
+    {
+      "id": "log-1792289812061",
+      "action": "ORDER_SAVED",
+      "details": "Order SVF-20261018-8341 status set to \"Confirmed\"",
+      "actor": "PaymentGateway",
+      "timestamp": "2026-10-18T02:16:52.061Z"
+    },
+    {
+      "id": "log-1792289812060",
+      "action": "STOCK_DEDUCTED",
+      "details": "Deducted stock for 6 order items",
+      "actor": "OrderConfirmation (SVF-20261018-8341)",
+      "timestamp": "2026-10-18T02:16:52.060Z"
+    },
+    {
+      "id": "log-1792289810839",
+      "action": "ORDER_SAVED",
+      "details": "Order SVF-20261018-8341 status set to \"Pending Payment\"",
+      "actor": "Customer (9876543210)",
+      "timestamp": "2026-10-18T02:16:50.839Z"
+    },
+    {
+      "id": "log-1792289745687",
+      "action": "ZONES_UPDATE",
+      "details": "Updated Bangalore delivery zones count: 1",
+      "actor": "Admin",
+      "timestamp": "2026-10-18T02:15:45.687Z"
+    },
+    {
+      "id": "log-1792289720943",
+      "action": "ZONES_UPDATE",
+      "details": "Updated Bangalore delivery zones count: 11",
+      "actor": "Admin",
+      "timestamp": "2026-10-18T02:15:20.943Z"
+    },
     {
       "id": "log-init",
       "action": "SYSTEM_INIT",
