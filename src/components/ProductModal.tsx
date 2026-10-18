@@ -8,6 +8,7 @@ import { X, CheckCircle2, ShieldCheck, Truck, Plus, Minus } from 'lucide-react';
 interface ProductModalProps {
   product: Product | null;
   onClose: () => void;
+  isOpen?: boolean;
 }
 
 export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) => {

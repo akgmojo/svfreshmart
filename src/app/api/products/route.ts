@@ -1,11 +1,20 @@
 import { NextResponse } from 'next/server';
-import { getAllProducts } from '@/data/db';
+import { getAllProducts, getProductBySlug } from '@/data/db';
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
+    const slug = searchParams.get('slug');
     const category = searchParams.get('category');
     const search = searchParams.get('search')?.toLowerCase();
+
+    if (slug) {
+      const product = getProductBySlug(slug);
+      if (!product || !product.isActive) {
+        return NextResponse.json({ success: false, error: 'Product not found' }, { status: 404 });
+      }
+      return NextResponse.json({ success: true, product });
+    }
 
     let products = getAllProducts(false);
 

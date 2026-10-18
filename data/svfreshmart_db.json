@@ -802,5 +802,53 @@
       "actor": "System",
       "timestamp": "2026-10-17T17:29:51.673Z"
     }
-  ]
+  ],
+  "admins": [
+    {
+      "id": "admin-super",
+      "username": "admin",
+      "name": "SV Super Admin",
+      "role": "Super Admin",
+      "passwordHash": "",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "admin-store",
+      "username": "store_mgr",
+      "name": "Koramangala Store Manager",
+      "role": "Store Manager",
+      "passwordHash": ".rKBba51ifEskh72ERqYxa864GL3c4ei",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "admin-inventory",
+      "username": "inventory_mgr",
+      "name": "Central Warehouse Inventory Lead",
+      "role": "Inventory Manager",
+      "passwordHash": "/9uShbjWeJRbrGAe.7U1h0v0kt.rOn6qK7hct/ZeISypU8qG",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "admin-order",
+      "username": "order_mgr",
+      "name": "Fulfillment & Dispatch Lead",
+      "role": "Order Manager",
+      "passwordHash": ".Gq/CsHF9eZRWyxfE6wz.u89wgo/JpHYjv2Sj6aWDcUxnV2KrK6u",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "admin-support",
+      "username": "support_user",
+      "name": "Customer Support Executive",
+      "role": "Support",
+      "passwordHash": ".9gk0kzm6iGuLe/eWVuluxZzkxKXRuY7268FD16AxznV.",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "webhookEvents": []
 }

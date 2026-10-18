@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { Product, ProductVariation } from '@/types';
 import { useCart } from '@/context/CartContext';
 import { Plus, Minus, Check, AlertCircle } from 'lucide-react';
@@ -69,12 +70,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails
           <div className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider mb-1">
             {product.category}
           </div>
-          <h3 
-            onClick={() => onOpenDetails?.(product)}
-            className="font-bold text-gray-900 text-sm hover:text-emerald-700 cursor-pointer line-clamp-2 leading-snug mb-2"
+          <Link 
+            href={`/product/${product.slug}`}
+            onClick={(e) => {
+              if (onOpenDetails) {
+                e.preventDefault();
+                onOpenDetails(product);
+              }
+            }}
+            className="font-bold text-gray-900 text-sm hover:text-emerald-700 block line-clamp-2 leading-snug mb-2"
           >
             {product.name}
-          </h3>
+          </Link>
 
           {/* Variation Selector (Dropdown) */}
           <div className="mb-3">

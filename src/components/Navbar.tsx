@@ -42,11 +42,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onSearch }) => {
               <span className="bg-emerald-600 text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Bangalore Only</span>
               <span>Farm harvested at dawn, delivered to your doorstep by noon</span>
             </div>
-            <div className="flex items-center space-x-4">
-              <Link href="/admin" className="flex items-center space-x-1 text-emerald-200 hover:text-white transition-colors">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Admin Panel</span>
-              </Link>
+            <div className="flex items-center space-x-4 text-emerald-100 text-[11px]">
+              <span>Customer Care: 080-4567-8900 (6AM - 9PM)</span>
             </div>
           </div>
         </div>

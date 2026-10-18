@@ -15,7 +15,7 @@ interface CheckoutModalProps {
 
 export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, onOrderSuccess }) => {
   const { items, pincode, subtotal, deliveryFee, totalAmount, clearCart } = useCart();
-  const { customer, openAuthModal, refreshProfile } = useAuth();
+  const { customer, openAuthModal, refreshProfile, token } = useAuth();
 
   const [step, setStep] = useState<'address' | 'payment' | 'processing' | 'confirmed'>('address');
   const [selectedAddressId, setSelectedAddressId] = useState<string>('');
@@ -112,8 +112,11 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, o
       try {
         await fetch('/api/auth/me', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone: customer.phoneNumber, address: finalAddress })
+          headers: { 
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({ address: finalAddress })
         });
         await refreshProfile();
       } catch (e) {
@@ -137,7 +140,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, o
 
       const orderRes = await fetch('/api/orders', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
         body: JSON.stringify(orderPayload)
       });
       const orderData = await orderRes.json();

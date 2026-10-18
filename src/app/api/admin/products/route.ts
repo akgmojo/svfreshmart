@@ -1,9 +1,15 @@
 import { NextResponse } from 'next/server';
 import { getAllProducts, saveProduct, getProductById } from '@/data/db';
 import { Product } from '@/types';
+import { AdminAuthService } from '@/services/AdminAuthService';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const admin = AdminAuthService.getAdminFromRequest(request);
+    if (!admin) {
+      return NextResponse.json({ success: false, error: 'Unauthorized. Admin login required.' }, { status: 401 });
+    }
+
     const products = getAllProducts(true);
     return NextResponse.json({ success: true, products });
   } catch (error) {
@@ -13,6 +19,15 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const admin = AdminAuthService.getAdminFromRequest(request);
+    if (!admin) {
+      return NextResponse.json({ success: false, error: 'Unauthorized. Admin login required.' }, { status: 401 });
+    }
+
+    if (!AdminAuthService.hasPermission(admin.role, ['Super Admin', 'Store Manager', 'Inventory Manager'])) {
+      return NextResponse.json({ success: false, error: 'Forbidden: Insufficient permissions to create products.' }, { status: 403 });
+    }
+
     const data = await request.json();
     const product: Product = {
       id: `prod-${Date.now()}`,
@@ -28,7 +43,7 @@ export async function POST(request: Request) {
       updatedAt: new Date().toISOString()
     };
 
-    saveProduct(product, 'Admin');
+    saveProduct(product, `${admin.name} (${admin.role})`);
     return NextResponse.json({ success: true, product });
   } catch (error) {
     return NextResponse.json({ success: false, error: 'Failed creating product' }, { status: 500 });
@@ -37,6 +52,15 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
+    const admin = AdminAuthService.getAdminFromRequest(request);
+    if (!admin) {
+      return NextResponse.json({ success: false, error: 'Unauthorized. Admin login required.' }, { status: 401 });
+    }
+
+    if (!AdminAuthService.hasPermission(admin.role, ['Super Admin', 'Store Manager', 'Inventory Manager'])) {
+      return NextResponse.json({ success: false, error: 'Forbidden: Insufficient permissions to edit products.' }, { status: 403 });
+    }
+
     const data = await request.json();
     const existing = getProductById(data.id);
     if (!existing) {
@@ -49,7 +73,7 @@ export async function PUT(request: Request) {
       updatedAt: new Date().toISOString()
     };
 
-    saveProduct(updated, 'Admin');
+    saveProduct(updated, `${admin.name} (${admin.role})`);
     return NextResponse.json({ success: true, product: updated });
   } catch (error) {
     return NextResponse.json({ success: false, error: 'Failed updating product' }, { status: 500 });

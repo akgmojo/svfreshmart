@@ -3,38 +3,135 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
-import { Order } from '@/types';
+import { Order, DeliveryAddress } from '@/types';
 import { Navbar } from '@/components/Navbar';
 import { AuthModal } from '@/components/AuthModal';
 import { CartDrawer } from '@/components/CartDrawer';
-import { Package, MapPin, User, LogOut, ChevronRight, Clock, CheckCircle2, ArrowLeft, Truck } from 'lucide-react';
+import { 
+  Package, 
+  MapPin, 
+  User, 
+  LogOut, 
+  ChevronRight, 
+  ArrowLeft, 
+  Plus, 
+  Trash2, 
+  CheckCircle2, 
+  Loader2 
+} from 'lucide-react';
 
 export default function AccountPage() {
-  const { customer, logout, openAuthModal } = useAuth();
+  const { customer, token, logout, openAuthModal, refreshProfile } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'orders' | 'addresses'>('orders');
 
+  // New Address Modal state
+  const [isAddAddressOpen, setIsAddAddressOpen] = useState(false);
+  const [newFullName, setNewFullName] = useState('');
+  const [newPhone, setNewPhone] = useState('');
+  const [newLine1, setNewLine1] = useState('');
+  const [newLine2, setNewLine2] = useState('');
+  const [newLandmark, setNewLandmark] = useState('');
+  const [newPin, setNewPin] = useState('560102');
+  const [isSavingAddress, setIsSavingAddress] = useState(false);
+  const [addressError, setAddressError] = useState('');
+
   useEffect(() => {
-    if (customer) {
+    if (customer && token) {
       fetchCustomerOrders();
     } else {
       setIsLoading(false);
     }
-  }, [customer]);
+  }, [customer, token]);
 
   const fetchCustomerOrders = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`/api/orders?phone=${customer?.phoneNumber}`);
+      const res = await fetch('/api/orders', {
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
       const data = await res.json();
       if (data.success) {
-        setOrders(data.orders);
+        setOrders(data.orders || []);
       }
     } catch (e) {
       console.error(e);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleAddAddress = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAddressError('');
+
+    if (!newLine1 || !newPin || !newPhone) {
+      setAddressError('Please fill in Address, Phone, and Pincode.');
+      return;
+    }
+
+    if (!/^560\d{3}$/.test(newPin.trim())) {
+      setAddressError('SV Freshmart delivers only to Bangalore pincodes (560xxx).');
+      return;
+    }
+
+    setIsSavingAddress(true);
+    try {
+      const newAddr: Omit<DeliveryAddress, 'id' | 'customerId'> = {
+        fullName: newFullName || customer?.name || 'Customer',
+        phoneNumber: newPhone,
+        addressLine1: newLine1,
+        addressLine2: newLine2,
+        landmark: newLandmark,
+        city: 'Bangalore',
+        pincode: newPin.trim(),
+        isDefault: (customer?.addresses.length || 0) === 0
+      };
+
+      const res = await fetch('/api/auth/me', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ address: newAddr })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        await refreshProfile();
+        setIsAddAddressOpen(false);
+        setNewLine1('');
+        setNewLine2('');
+        setNewLandmark('');
+      } else {
+        setAddressError(data.error || 'Failed to save address.');
+      }
+    } catch {
+      setAddressError('Network error while saving address.');
+    } finally {
+      setIsSavingAddress(false);
+    }
+  };
+
+  const handleDeleteAddress = async (addressId: string) => {
+    if (!confirm('Are you sure you want to remove this address?')) return;
+    try {
+      const res = await fetch('/api/auth/me', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ action: 'delete', addressId })
+      });
+      const data = await res.json();
+      if (data.success) {
+        await refreshProfile();
+      }
+    } catch (e) {
+      console.error('Failed to delete address', e);
     }
   };
 
@@ -110,8 +207,9 @@ export default function AccountPage() {
               </h1>
               <p className="text-xs text-gray-500">+91 {customer.phoneNumber}</p>
               <div className="mt-1 flex items-center space-x-2">
-                <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
-                  Verified Mobile Customer
+                <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full flex items-center space-x-1">
+                  <CheckCircle2 className="w-3 h-3" />
+                  <span>Verified Bangalore Mobile Customer</span>
                 </span>
               </div>
             </div>
@@ -119,14 +217,14 @@ export default function AccountPage() {
 
           <button
             onClick={logout}
-            className="flex items-center space-x-1.5 px-4 py-2 border border-gray-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200 rounded-xl text-xs font-bold text-gray-700 transition-colors"
+            className="flex items-center space-x-1.5 px-4 py-2 border border-gray-200 hover:border-red-200 text-gray-600 hover:text-red-600 rounded-xl text-xs font-semibold hover:bg-red-50/50 transition-colors"
           >
             <LogOut className="w-4 h-4" />
-            <span>Sign Out</span>
+            <span>Logout</span>
           </button>
         </div>
 
-        {/* Tabs */}
+        {/* Account Tabs */}
         <div className="flex space-x-2 border-b border-gray-200">
           <button
             onClick={() => setActiveTab('orders')}
@@ -148,7 +246,7 @@ export default function AccountPage() {
             }`}
           >
             <MapPin className="w-4 h-4" />
-            <span>Saved Addresses ({customer.addresses.length})</span>
+            <span>Saved Addresses ({customer.addresses?.length || 0})</span>
           </button>
         </div>
 
@@ -156,7 +254,10 @@ export default function AccountPage() {
         {activeTab === 'orders' && (
           <div className="space-y-4">
             {isLoading ? (
-              <div className="text-center py-12 text-gray-400 text-xs">Loading orders...</div>
+              <div className="text-center py-12 text-gray-400 text-xs flex items-center justify-center space-x-2">
+                <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
+                <span>Loading your orders securely...</span>
+              </div>
             ) : orders.length === 0 ? (
               <div className="bg-white rounded-3xl p-12 text-center border border-gray-100 shadow-sm">
                 <Package className="w-12 h-12 text-gray-300 mx-auto mb-3" />
@@ -192,17 +293,24 @@ export default function AccountPage() {
                       </span>
                     </div>
 
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-3">
                       <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold border ${getStatusBadge(order.status)}`}>
                         {order.status}
                       </span>
                       <span className="font-black text-emerald-900 text-sm">
                         ₹{order.totalAmount}
                       </span>
+                      <Link
+                        href={`/account/orders/${order.id}`}
+                        className="px-3 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-xs rounded-lg flex items-center space-x-1"
+                      >
+                        <span>Details</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </Link>
                     </div>
                   </div>
 
-                  {/* Order Items */}
+                  {/* Order Items Snapshot */}
                   <div className="divide-y divide-gray-50 text-xs">
                     {order.items.map(item => (
                       <div key={item.id} className="py-2.5 flex items-center justify-between">
@@ -219,22 +327,22 @@ export default function AccountPage() {
                             </div>
                           </div>
                         </div>
-                        <span className="font-bold text-gray-900">₹{item.subtotal}</span>
+                        <div className="font-bold text-gray-900">
+                          ₹{item.subtotal}
+                        </div>
                       </div>
                     ))}
                   </div>
 
-                  {/* Delivery address info */}
-                  <div className="bg-gray-50 rounded-2xl p-3 text-xs flex flex-wrap items-center justify-between gap-2 text-gray-600">
-                    <div className="flex items-center space-x-2">
-                      <Truck className="w-4 h-4 text-emerald-600" />
-                      <span>
-                        Delivering to: <strong>{order.deliveryAddress.addressLine1}</strong>, Bangalore ({order.deliveryAddress.pincode})
-                      </span>
+                  {/* Order Footer */}
+                  <div className="pt-2 border-t border-gray-100 flex flex-wrap items-center justify-between text-[11px] text-gray-500">
+                    <div className="flex items-center space-x-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                      <span>Delivering to: {order.deliveryAddress.addressLine1}, {order.deliveryAddress.pincode}</span>
                     </div>
-                    <span className="text-[11px] text-gray-500">
-                      Payment: {order.paymentMethod} ({order.paymentStatus})
-                    </span>
+                    <div>
+                      Payment: <strong className="text-gray-700">{order.paymentStatus}</strong> ({order.paymentMethod})
+                    </div>
                   </div>
                 </div>
               ))
@@ -244,40 +352,178 @@ export default function AccountPage() {
 
         {/* Tab 2: Saved Addresses */}
         {activeTab === 'addresses' && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {customer.addresses.length === 0 ? (
-              <div className="col-span-2 bg-white rounded-3xl p-12 text-center border border-gray-100 shadow-sm text-xs text-gray-500">
-                No delivery addresses saved. Addresses will be automatically saved when placing your first order.
+          <div className="space-y-4">
+            <div className="flex justify-between items-center mb-2">
+              <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                Bangalore Delivery Addresses
+              </h2>
+              <button
+                onClick={() => {
+                  setNewFullName(customer.name || '');
+                  setNewPhone(customer.phoneNumber);
+                  setIsAddAddressOpen(true);
+                }}
+                className="flex items-center space-x-1 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-sm"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Add New Address</span>
+              </button>
+            </div>
+
+            {(!customer.addresses || customer.addresses.length === 0) ? (
+              <div className="bg-white rounded-3xl p-10 text-center border border-gray-100 shadow-sm">
+                <MapPin className="w-10 h-10 text-gray-300 mx-auto mb-2" />
+                <p className="text-xs text-gray-500">No saved addresses found. Add an address for express Bangalore checkout.</p>
               </div>
             ) : (
-              customer.addresses.map(addr => (
-                <div
-                  key={addr.id}
-                  className="bg-white rounded-3xl p-5 border border-gray-100 shadow-sm relative space-y-2 text-xs"
-                >
-                  {addr.isDefault && (
-                    <span className="inline-block bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full mb-1">
-                      Default Delivery Address
-                    </span>
-                  )}
-                  <h4 className="font-black text-gray-900 text-sm">{addr.fullName}</h4>
-                  <p className="text-gray-600 leading-relaxed">
-                    {addr.addressLine1}
-                    {addr.addressLine2 && `, ${addr.addressLine2}`}
-                    {addr.landmark && `, Near ${addr.landmark}`}
-                    <br />
-                    Bangalore, Karnataka - <strong>{addr.pincode}</strong>
-                  </p>
-                  <p className="text-gray-500 font-semibold pt-1">Phone: +91 {addr.phoneNumber}</p>
-                </div>
-              ))
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {customer.addresses.map(addr => (
+                  <div
+                    key={addr.id}
+                    className={`bg-white rounded-3xl p-5 border shadow-sm relative flex flex-col justify-between ${
+                      addr.isDefault ? 'border-emerald-300 ring-2 ring-emerald-100' : 'border-gray-100'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-bold text-xs text-gray-900">{addr.fullName}</span>
+                        {addr.isDefault && (
+                          <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+                            Default
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-600 leading-relaxed">
+                        {addr.addressLine1}
+                        {addr.addressLine2 && `, ${addr.addressLine2}`}
+                        {addr.landmark && ` (Near ${addr.landmark})`}
+                      </p>
+                      <p className="text-xs font-semibold text-emerald-800 mt-1">
+                        Bangalore — {addr.pincode}
+                      </p>
+                      <p className="text-[11px] text-gray-500 mt-1">Phone: {addr.phoneNumber}</p>
+                    </div>
+
+                    <div className="mt-4 pt-3 border-t border-gray-100 flex justify-end">
+                      <button
+                        onClick={() => handleDeleteAddress(addr.id)}
+                        className="text-red-500 hover:text-red-700 text-xs font-semibold flex items-center space-x-1"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         )}
+
       </main>
 
-      <CartDrawer onProceedCheckout={() => {}} />
+      {/* Add Address Modal */}
+      {isAddAddressOpen && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95">
+            <h3 className="text-sm font-black text-gray-900 mb-1">Add Bangalore Delivery Address</h3>
+            <p className="text-xs text-gray-500 mb-4">Express same-day delivery requires a valid 6-digit Bangalore pincode (560xxx).</p>
+
+            {addressError && (
+              <div className="p-2 mb-3 bg-red-50 text-red-700 text-xs rounded-xl font-semibold">
+                {addressError}
+              </div>
+            )}
+
+            <form onSubmit={handleAddAddress} className="space-y-3">
+              <div>
+                <label className="text-[11px] font-bold text-gray-700 block mb-1">Full Name</label>
+                <input
+                  type="text"
+                  value={newFullName}
+                  onChange={e => setNewFullName(e.target.value)}
+                  className="w-full px-3 py-2 text-xs border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+
+              <div>
+                <label className="text-[11px] font-bold text-gray-700 block mb-1">Phone Number</label>
+                <input
+                  type="tel"
+                  maxLength={10}
+                  value={newPhone}
+                  onChange={e => setNewPhone(e.target.value)}
+                  className="w-full px-3 py-2 text-xs border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+
+              <div>
+                <label className="text-[11px] font-bold text-gray-700 block mb-1">House / Flat / Street (Address Line 1)</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Flat 301, Brigade Orchards"
+                  value={newLine1}
+                  onChange={e => setNewLine1(e.target.value)}
+                  className="w-full px-3 py-2 text-xs border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+
+              <div>
+                <label className="text-[11px] font-bold text-gray-700 block mb-1">Landmark (Optional)</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Opposite Forum Mall"
+                  value={newLandmark}
+                  onChange={e => setNewLandmark(e.target.value)}
+                  className="w-full px-3 py-2 text-xs border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-[11px] font-bold text-gray-700 block mb-1">City</label>
+                  <input
+                    type="text"
+                    disabled
+                    value="Bangalore"
+                    className="w-full px-3 py-2 text-xs bg-gray-100 border border-gray-200 rounded-xl text-gray-600 font-semibold"
+                  />
+                </div>
+                <div>
+                  <label className="text-[11px] font-bold text-gray-700 block mb-1">Pincode (560xxx)</label>
+                  <input
+                    type="text"
+                    maxLength={6}
+                    value={newPin}
+                    onChange={e => setNewPin(e.target.value)}
+                    className="w-full px-3 py-2 text-xs border border-gray-200 rounded-xl outline-none font-bold text-emerald-800 focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+              </div>
+
+              <div className="flex space-x-2 pt-3">
+                <button
+                  type="button"
+                  onClick={() => setIsAddAddressOpen(false)}
+                  className="w-1/2 py-2 text-xs font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSavingAddress}
+                  className="w-1/2 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-md"
+                >
+                  {isSavingAddress ? 'Saving...' : 'Save Address'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       <AuthModal />
+      <CartDrawer />
     </div>
   );
 }

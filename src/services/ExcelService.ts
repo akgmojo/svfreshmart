@@ -2,7 +2,9 @@ import * as XLSX from 'xlsx';
 import { ExcelValidationResult, VariationUnit } from '../types';
 import { getAllProducts, saveProduct, addAuditLog } from '../data/db';
 
-const VALID_UNITS: VariationUnit[] = ['g', 'kg', 'piece', 'pieces', 'ml', 'L', 'Pack', 'Box', 'Bundle'];
+const VALID_UNITS: VariationUnit[] = [
+  'g', 'kg', 'piece', 'pieces', 'ml', 'L', 'pack', 'box', 'bundle', 'Pack', 'Box', 'Bundle', 'bottle', 'jar'
+];
 
 export class ExcelService {
   /**
@@ -193,8 +195,17 @@ export class ExcelService {
         rowHasCriticalError = true;
       }
 
-      // Compare with existing catalogue to detect changes and price fluctuations
-      if (variantSku && existingVarMap.has(variantSku.toUpperCase())) {
+      // Check if SKU exists in catalogue
+      if (variantSku && !existingVarMap.has(variantSku.toUpperCase())) {
+        errors.push({
+          row: rowNum,
+          sku: variantSku,
+          field: 'Variant SKU',
+          message: `Unknown SKU "${variantSku}". This SKU does not exist in the SV Freshmart catalogue.`,
+          critical: true
+        });
+        rowHasCriticalError = true;
+      } else if (variantSku && existingVarMap.has(variantSku.toUpperCase())) {
         const { product, variation } = existingVarMap.get(variantSku.toUpperCase())!;
         
         let hasPriceWarning = false;

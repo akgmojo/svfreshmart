@@ -1,8 +1,14 @@
 import jwt from 'jsonwebtoken';
 import { Customer, DeliveryAddress } from '../types';
-import { getCustomerByPhone, saveCustomer } from '../data/db';
+import { getCustomerByPhone, saveCustomer, addCustomerAddress, deleteCustomerAddress } from '../data/db';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'svfreshmart_secure_jwt_secret_2026';
+
+export interface CustomerSession {
+  id: string;
+  phone: string;
+  name: string;
+}
 
 export class CustomerService {
   /**
@@ -31,23 +37,28 @@ export class CustomerService {
   }
 
   /**
-   * Add or update customer delivery address
+   * Add customer delivery address
    */
   static saveAddress(phoneNumber: string, addressData: Omit<DeliveryAddress, 'id' | 'customerId'>): Customer {
-    const customer = this.getOrCreateCustomer(phoneNumber);
+    const cleaned = phoneNumber.replace(/\D/g, '').slice(-10);
+    const customer = this.getOrCreateCustomer(cleaned);
     const newAddress: DeliveryAddress = {
-      id: `addr-${Date.now()}`,
+      id: `addr-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
       customerId: customer.id,
       ...addressData,
-      isDefault: customer.addresses.length === 0 || addressData.isDefault
+      isDefault: customer.addresses.length === 0 || !!addressData.isDefault
     };
 
-    if (newAddress.isDefault) {
-      customer.addresses.forEach(a => { a.isDefault = false; });
-    }
+    const updated = addCustomerAddress(cleaned, newAddress);
+    return updated || customer;
+  }
 
-    customer.addresses.push(newAddress);
-    return saveCustomer(customer);
+  /**
+   * Delete customer delivery address
+   */
+  static removeAddress(phoneNumber: string, addressId: string): Customer | null {
+    const cleaned = phoneNumber.replace(/\D/g, '').slice(-10);
+    return deleteCustomerAddress(cleaned, addressId);
   }
 
   /**
@@ -68,12 +79,37 @@ export class CustomerService {
   /**
    * Verify session JWT token
    */
-  static verifyToken(token: string): { id: string; phone: string; name: string } | null {
+  static verifyToken(token: string): CustomerSession | null {
     try {
-      const decoded = jwt.verify(token, JWT_SECRET) as { id: string; phone: string; name: string };
+      if (!token) return null;
+      const decoded = jwt.verify(token, JWT_SECRET) as CustomerSession;
       return decoded;
     } catch {
       return null;
     }
+  }
+
+  /**
+   * Extract authenticated customer session from Request (Header or Cookie)
+   */
+  static getSessionFromRequest(request: Request): CustomerSession | null {
+    // 1. Try Authorization header
+    const authHeader = request.headers.get('authorization');
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.substring(7).trim();
+      const session = this.verifyToken(token);
+      if (session) return session;
+    }
+
+    // 2. Try Cookie header
+    const cookieHeader = request.headers.get('cookie') || '';
+    const match = cookieHeader.match(/svf_customer_token=([^;]+)/);
+    if (match && match[1]) {
+      const token = decodeURIComponent(match[1].trim());
+      const session = this.verifyToken(token);
+      if (session) return session;
+    }
+
+    return null;
   }
 }

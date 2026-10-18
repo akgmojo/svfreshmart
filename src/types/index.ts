@@ -5,9 +5,14 @@ export type VariationUnit =
   | 'pieces' 
   | 'ml' 
   | 'L' 
+  | 'pack'
+  | 'box'
+  | 'bundle'
   | 'Pack' 
   | 'Box' 
-  | 'Bundle';
+  | 'Bundle'
+  | 'bottle'
+  | 'jar';
 
 export interface ProductVariation {
   id: string;
@@ -88,7 +93,7 @@ export interface Order {
   paymentStatus: 'Pending' | 'Paid' | 'Failed' | 'Refunded';
   razorpayOrderId?: string;
   razorpayPaymentId?: string;
-  deliveryAddress: DeliveryAddress;
+  deliveryAddress: DeliveryAddress; // Immutable snapshot
   deliveryNotes?: string;
   createdAt: string;
   updatedAt: string;
@@ -169,4 +174,30 @@ export interface AuditLog {
   details: string;
   actor: string;
   timestamp: string;
+}
+
+// RBAC Roles for Admin Panel
+export type AdminRole = 
+  | 'Super Admin' 
+  | 'Store Manager' 
+  | 'Inventory Manager' 
+  | 'Order Manager' 
+  | 'Support';
+
+export interface AdminUser {
+  id: string;
+  username: string;
+  name: string;
+  role: AdminRole;
+  passwordHash: string; // bcrypt hash
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface WebhookEventRecord {
+  id: string;
+  eventId: string;
+  eventType: string;
+  orderId?: string;
+  processedAt: string;
 }

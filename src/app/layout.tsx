@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: 'Order farm-fresh vegetables, organic fruits, Nandini dairy, and daily essentials across Bangalore with guaranteed morning delivery.',
   keywords: ['Bangalore grocery', 'fresh vegetables Bangalore', 'farm fresh fruits', 'Nandini milk delivery', 'SV Freshmart', 'same day grocery Bangalore'],
   authors: [{ name: 'SV Freshmart Bangalore' }],
-  metadataBase: new URL('https://svfreshmart.in'),
+  metadataBase: new URL('https://svfreshmart.com'),
   openGraph: {
     title: 'SV Freshmart — Bangalore Farm Fresh Daily Groceries',
     description: 'Fresh farm harvest delivered to Bangalore doorsteps daily.',
@@ -25,8 +25,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   themeColor: '#047857',
 };
 

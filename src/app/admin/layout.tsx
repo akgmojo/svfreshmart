@@ -1,20 +1,96 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { LayoutDashboard, ShoppingBag, Package, FileSpreadsheet, MapPin, Store, ArrowLeft } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { 
+  LayoutDashboard, 
+  ShoppingBag, 
+  Package, 
+  FileSpreadsheet, 
+  MapPin, 
+  ArrowLeft, 
+  LogOut, 
+  UserCheck, 
+  Loader2 
+} from 'lucide-react';
+import { AdminRole } from '@/types';
+
+interface SafeAdmin {
+  id: string;
+  username: string;
+  name: string;
+  role: AdminRole;
+}
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [admin, setAdmin] = useState<SafeAdmin | null>(null);
+  const [isChecking, setIsChecking] = useState(true);
 
-  const navItems = [
-    { label: 'Overview', href: '/admin', icon: LayoutDashboard },
-    { label: 'Orders', href: '/admin/orders', icon: Package },
-    { label: 'Products & Variations', href: '/admin/products', icon: ShoppingBag },
-    { label: 'Excel Price & Stock', href: '/admin/excel', icon: FileSpreadsheet },
-    { label: 'Bangalore Zones', href: '/admin/zones', icon: MapPin },
+  const isLoginPage = pathname === '/admin/login';
+
+  useEffect(() => {
+    if (isLoginPage) {
+      setIsChecking(false);
+      return;
+    }
+
+    const checkAdminAuth = async () => {
+      try {
+        const res = await fetch('/api/admin/auth/me');
+        const data = await res.json();
+
+        if (res.ok && data.success && data.admin) {
+          setAdmin(data.admin);
+        } else {
+          router.push('/admin/login');
+        }
+      } catch {
+        router.push('/admin/login');
+      } finally {
+        setIsChecking(false);
+      }
+    };
+
+    checkAdminAuth();
+  }, [pathname, isLoginPage, router]);
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/admin/auth/me', { method: 'POST' });
+      localStorage.removeItem('svf_admin_session');
+      router.push('/admin/login');
+    } catch {
+      router.push('/admin/login');
+    }
+  };
+
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
+
+  if (isChecking) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-emerald-500">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
+
+  const allNavItems = [
+    { label: 'Overview', href: '/admin', icon: LayoutDashboard, roles: ['Super Admin', 'Store Manager', 'Inventory Manager', 'Order Manager', 'Support'] },
+    { label: 'Orders', href: '/admin/orders', icon: Package, roles: ['Super Admin', 'Store Manager', 'Order Manager', 'Support'] },
+    { label: 'Products & Variations', href: '/admin/products', icon: ShoppingBag, roles: ['Super Admin', 'Store Manager', 'Inventory Manager', 'Order Manager', 'Support'] },
+    { label: 'Excel Price & Stock', href: '/admin/excel', icon: FileSpreadsheet, roles: ['Super Admin', 'Store Manager', 'Inventory Manager'] },
+    { label: 'Bangalore Zones', href: '/admin/zones', icon: MapPin, roles: ['Super Admin', 'Store Manager'] },
   ];
+
+  const userRole = admin?.role || 'Support';
+  const visibleNavItems = allNavItems.filter(item => 
+    userRole === 'Super Admin' || item.roles.includes(userRole)
+  );
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col md:flex-row font-sans text-gray-900">
@@ -29,14 +105,32 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </div>
               <div>
                 <h1 className="font-bold text-sm tracking-tight text-white leading-tight">SV Freshmart</h1>
-                <span className="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">Admin Console V1</span>
+                <span className="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">
+                  Admin Console
+                </span>
               </div>
             </div>
           </div>
 
+          {/* Current Admin Badge */}
+          {admin && (
+            <div className="m-3 p-3 bg-slate-800/80 rounded-xl border border-slate-700/60">
+              <div className="flex items-center space-x-2 mb-1">
+                <UserCheck className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                <span className="text-xs font-bold text-white truncate">{admin.name}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-800">
+                  {admin.role}
+                </span>
+                <span className="text-[10px] text-slate-400">@{admin.username}</span>
+              </div>
+            </div>
+          )}
+
           {/* Nav Items */}
           <nav className="p-3 space-y-1">
-            {navItems.map(item => {
+            {visibleNavItems.map(item => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
               return (
@@ -57,14 +151,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </nav>
         </div>
 
-        {/* Back to Customer Storefront */}
-        <div className="p-4 border-t border-slate-800">
+        {/* Footer Actions */}
+        <div className="p-4 border-t border-slate-800 space-y-2">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center space-x-2 px-3 py-2 text-xs font-semibold text-rose-400 hover:bg-rose-950/30 rounded-lg transition-colors"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Sign Out</span>
+          </button>
+
           <Link
             href="/"
-            className="flex items-center space-x-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
+            className="flex items-center space-x-2 px-3 py-1.5 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Return to Storefront</span>
+            <span>Customer Storefront</span>
           </Link>
         </div>
       </aside>

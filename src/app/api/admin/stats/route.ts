@@ -1,8 +1,18 @@
 import { NextResponse } from 'next/server';
 import { getAllOrders, getAllProducts, getAuditLogs } from '@/data/db';
+import { AdminAuthService } from '@/services/AdminAuthService';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const admin = AdminAuthService.getAdminFromRequest(request);
+    if (!admin) {
+      return NextResponse.json({ success: false, error: 'Unauthorized. Admin login required.' }, { status: 401 });
+    }
+
+    if (!AdminAuthService.hasPermission(admin.role, ['Super Admin', 'Store Manager', 'Inventory Manager', 'Order Manager'])) {
+      return NextResponse.json({ success: false, error: 'Forbidden: Insufficient permissions to view dashboard stats.' }, { status: 403 });
+    }
+
     const orders = getAllOrders();
     const products = getAllProducts(true);
     const auditLogs = getAuditLogs();

@@ -5,7 +5,7 @@ import { useCart } from '@/context/CartContext';
 import { X, Plus, Minus, Trash2, ShoppingBag, ArrowRight, Truck, AlertCircle } from 'lucide-react';
 
 interface CartDrawerProps {
-  onProceedCheckout: () => void;
+  onProceedCheckout?: () => void;
 }
 
 export const CartDrawer: React.FC<CartDrawerProps> = ({ onProceedCheckout }) => {
@@ -208,7 +208,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onProceedCheckout }) => 
                 disabled={minOrderRemaining > 0 || !isDeliverable}
                 onClick={() => {
                   closeCart();
-                  onProceedCheckout();
+                  if (onProceedCheckout) {
+                    onProceedCheckout();
+                  } else {
+                    window.location.href = '/';
+                  }
                 }}
                 className={`w-full py-3 px-4 rounded-xl font-black text-sm flex items-center justify-between transition-all ${
                   minOrderRemaining > 0 || !isDeliverable

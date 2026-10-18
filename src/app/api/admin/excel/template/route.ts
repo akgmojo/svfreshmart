@@ -1,8 +1,18 @@
 import { NextResponse } from 'next/server';
 import { ExcelService } from '@/services/ExcelService';
+import { AdminAuthService } from '@/services/AdminAuthService';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const admin = AdminAuthService.getAdminFromRequest(request);
+    if (!admin) {
+      return NextResponse.json({ success: false, error: 'Unauthorized. Admin login required.' }, { status: 401 });
+    }
+
+    if (!AdminAuthService.hasPermission(admin.role, ['Super Admin', 'Store Manager', 'Inventory Manager'])) {
+      return NextResponse.json({ success: false, error: 'Forbidden: Insufficient permissions for catalogue export.' }, { status: 403 });
+    }
+
     const buffer = ExcelService.generateCatalogueTemplate();
     const uint8Array = new Uint8Array(buffer);
 

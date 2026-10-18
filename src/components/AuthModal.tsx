@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { X, Smartphone, KeyRound, ArrowRight, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { X, Smartphone, ArrowRight, ShieldCheck } from 'lucide-react';
 
 export const AuthModal: React.FC = () => {
   const { isAuthModalOpen, closeAuthModal, login } = useAuth();
@@ -12,8 +12,16 @@ export const AuthModal: React.FC = () => {
   const [fullName, setFullName] = useState('');
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [serverOtpPreview, setServerOtpPreview] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [cooldown, setCooldown] = useState(0);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (cooldown > 0) {
+      timer = setTimeout(() => setCooldown(c => c - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [cooldown]);
 
   if (!isAuthModalOpen) return null;
 
@@ -21,8 +29,8 @@ export const AuthModal: React.FC = () => {
     e?.preventDefault();
     setErrorMessage('');
     const cleaned = phoneNumber.replace(/\D/g, '').slice(-10);
-    if (cleaned.length !== 10) {
-      setErrorMessage('Please enter a valid 10-digit mobile number.');
+    if (!/^[6-9]\d{9}$/.test(cleaned)) {
+      setErrorMessage('Please enter a valid 10-digit Indian mobile number.');
       return;
     }
 
@@ -36,8 +44,11 @@ export const AuthModal: React.FC = () => {
       const data = await res.json();
       if (!res.ok) {
         setErrorMessage(data.message || 'Failed to send OTP.');
+        if (data.remainingSeconds) {
+          setCooldown(data.remainingSeconds);
+        }
       } else {
-        setServerOtpPreview(data.code || null);
+        setCooldown(60);
         setStep('otp');
       }
     } catch {
@@ -50,7 +61,7 @@ export const AuthModal: React.FC = () => {
   const handleVerifyOtp = async (e?: React.FormEvent) => {
     e?.preventDefault();
     setErrorMessage('');
-    if (otp.length < 4) {
+    if (otp.length !== 6) {
       setErrorMessage('Please enter the 6-digit OTP.');
       return;
     }
@@ -104,7 +115,7 @@ export const AuthModal: React.FC = () => {
           <p className="text-xs text-gray-500 mt-0.5">
             {step === 'phone'
               ? 'Enter your phone number for instant OTP access'
-              : `Enter the code sent to +91 ${phoneNumber}`}
+              : `Enter the 6-digit code sent to +91 ${phoneNumber}`}
           </p>
         </div>
 
@@ -146,10 +157,10 @@ export const AuthModal: React.FC = () => {
 
             <button
               type="submit"
-              disabled={isLoading}
-              className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs rounded-xl shadow-md shadow-emerald-600/20 transition-all flex items-center justify-center space-x-1.5"
+              disabled={isLoading || cooldown > 0}
+              className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 disabled:bg-gray-400 text-white font-bold text-xs rounded-xl shadow-md shadow-emerald-600/20 transition-all flex items-center justify-center space-x-1.5"
             >
-              <span>{isLoading ? 'Sending OTP...' : 'Get OTP'}</span>
+              <span>{isLoading ? 'Sending OTP...' : cooldown > 0 ? `Wait ${cooldown}s` : 'Get OTP'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
 
@@ -166,18 +177,16 @@ export const AuthModal: React.FC = () => {
           </form>
         ) : (
           <form onSubmit={handleVerifyOtp} className="space-y-4">
-            {serverOtpPreview && (
+            {phoneNumber.replace(/\D/g, '').slice(-10) === '9876543210' && (
               <div className="bg-emerald-50 border border-emerald-200 p-2.5 rounded-xl text-center text-xs text-emerald-900">
-                <span>Test OTP Code: </span>
-                <strong className="text-sm font-black text-emerald-700 tracking-wider font-mono">
-                  {serverOtpPreview}
-                </strong>
+                <span>Demo Account Test OTP: </span>
+                <strong className="text-sm font-black text-emerald-700 tracking-wider font-mono">123456</strong>
                 <button
                   type="button"
-                  onClick={() => setOtp(serverOtpPreview)}
+                  onClick={() => setOtp('123456')}
                   className="block mx-auto mt-1 text-[10px] text-emerald-800 font-bold underline"
                 >
-                  Auto-fill {serverOtpPreview}
+                  Auto-fill 123456
                 </button>
               </div>
             )}
@@ -187,17 +196,17 @@ export const AuthModal: React.FC = () => {
               <input
                 type="text"
                 maxLength={6}
-                placeholder="123456"
+                placeholder="••••••"
                 value={otp}
-                onChange={e => setOtp(e.target.value)}
+                onChange={e => setOtp(e.target.value.replace(/\D/g, ''))}
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-center text-lg font-black tracking-widest focus:ring-2 focus:ring-emerald-500 outline-none"
               />
             </div>
 
             <button
               type="submit"
-              disabled={isLoading}
-              className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs rounded-xl shadow-md shadow-emerald-600/20 transition-all"
+              disabled={isLoading || otp.length !== 6}
+              className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 disabled:bg-gray-400 text-white font-bold text-xs rounded-xl shadow-md shadow-emerald-600/20 transition-all"
             >
               {isLoading ? 'Verifying...' : 'Verify & Continue'}
             </button>
@@ -212,10 +221,11 @@ export const AuthModal: React.FC = () => {
               </button>
               <button
                 type="button"
+                disabled={cooldown > 0}
                 onClick={() => handleSendOtp()}
-                className="text-emerald-700 font-bold hover:underline"
+                className={`font-bold ${cooldown > 0 ? 'text-gray-400 cursor-not-allowed' : 'text-emerald-700 hover:underline'}`}
               >
-                Resend OTP
+                {cooldown > 0 ? `Resend in ${cooldown}s` : 'Resend OTP'}
               </button>
             </div>
           </form>
