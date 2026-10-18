@@ -1,0 +1,223 @@
+import { Product, BangaloreDeliveryZone } from '../types';
+
+export const INITIAL_DELIVERY_ZONES: BangaloreDeliveryZone[] = [
+  { pincode: '560034', areaName: 'Koramangala', isServiceable: true, deliveryFee: 30, freeDeliveryThreshold: 399, minOrderValue: 149, estimatedHours: 'Same Day (2-4 hrs)' },
+  { pincode: '560038', areaName: 'Indiranagar', isServiceable: true, deliveryFee: 30, freeDeliveryThreshold: 399, minOrderValue: 149, estimatedHours: 'Same Day (2-4 hrs)' },
+  { pincode: '560102', areaName: 'HSR Layout', isServiceable: true, deliveryFee: 30, freeDeliveryThreshold: 399, minOrderValue: 149, estimatedHours: 'Same Day (2-4 hrs)' },
+  { pincode: '560066', areaName: 'Whitefield', isServiceable: true, deliveryFee: 40, freeDeliveryThreshold: 499, minOrderValue: 199, estimatedHours: 'Same Day (3-5 hrs)' },
+  { pincode: '560041', areaName: 'Jayanagar', isServiceable: true, deliveryFee: 30, freeDeliveryThreshold: 399, minOrderValue: 149, estimatedHours: 'Same Day (2-4 hrs)' },
+  { pincode: '560076', areaName: 'BTM Layout', isServiceable: true, deliveryFee: 30, freeDeliveryThreshold: 399, minOrderValue: 149, estimatedHours: 'Same Day (2-4 hrs)' },
+  { pincode: '560037', areaName: 'Marathahalli', isServiceable: true, deliveryFee: 35, freeDeliveryThreshold: 449, minOrderValue: 149, estimatedHours: 'Same Day (3-5 hrs)' },
+  { pincode: '560003', areaName: 'Malleshwaram', isServiceable: true, deliveryFee: 35, freeDeliveryThreshold: 449, minOrderValue: 149, estimatedHours: 'Same Day (3-5 hrs)' },
+  { pincode: '560001', areaName: 'MG Road / Central Bangalore', isServiceable: true, deliveryFee: 35, freeDeliveryThreshold: 449, minOrderValue: 149, estimatedHours: 'Same Day (2-4 hrs)' },
+  { pincode: '560068', areaName: 'Electronic City', isServiceable: true, deliveryFee: 45, freeDeliveryThreshold: 499, minOrderValue: 199, estimatedHours: 'Next Morning / Same Day' },
+  { pincode: '560092', areaName: 'Hebbal', isServiceable: true, deliveryFee: 40, freeDeliveryThreshold: 499, minOrderValue: 199, estimatedHours: 'Same Day (3-5 hrs)' },
+];
+
+export const INITIAL_PRODUCTS: Product[] = [
+  {
+    id: 'prod-1',
+    productSku: 'SVF-VEG-CHILLI',
+    name: 'Fresh Green Chilli (ಹಸಿ ಮೆಣಸಿನಕಾಯಿ)',
+    slug: 'fresh-green-chilli',
+    description: 'Crisp, spicy, farm-fresh green chillies handpicked daily from Kolar farms. Essential for daily South Indian cooking.',
+    category: 'Vegetables',
+    imageUrl: 'https://images.unsplash.com/photo-1596701062351-8c2c14d1fdd0?w=600&auto=format&fit=crop&q=80',
+    isActive: true,
+    createdAt: '2026-10-15T08:00:00.000Z',
+    updatedAt: '2026-10-15T08:00:00.000Z',
+    variations: [
+      { id: 'var-1-1', productId: 'prod-1', variantSku: 'SVF-CHILLI-50G', quantity: 50, unit: 'g', label: '50g', price: 10, mrp: 15, stock: 45, isActive: true },
+      { id: 'var-1-2', productId: 'prod-1', variantSku: 'SVF-CHILLI-100G', quantity: 100, unit: 'g', label: '100g', price: 15, mrp: 20, stock: 60, isActive: true },
+      { id: 'var-1-3', productId: 'prod-1', variantSku: 'SVF-CHILLI-250G', quantity: 250, unit: 'g', label: '250g', price: 28, mrp: 38, stock: 85, isActive: true },
+      { id: 'var-1-4', productId: 'prod-1', variantSku: 'SVF-CHILLI-500G', quantity: 500, unit: 'g', label: '500g', price: 52, mrp: 70, stock: 40, isActive: true },
+    ]
+  },
+  {
+    id: 'prod-2',
+    productSku: 'SVF-VEG-ONION',
+    name: 'Bangalore Pink Onion (ಈರುಳ್ಳಿ)',
+    slug: 'bangalore-pink-onion',
+    description: 'Naturally pungent, thin-skinned Bangalore grade-A pink onions. Perfect texture and sweetness for sambar, curries, and salads.',
+    category: 'Vegetables',
+    imageUrl: 'https://images.unsplash.com/photo-1508747703725-719777637510?w=600&auto=format&fit=crop&q=80',
+    isActive: true,
+    createdAt: '2026-10-15T08:00:00.000Z',
+    updatedAt: '2026-10-15T08:00:00.000Z',
+    variations: [
+      { id: 'var-2-1', productId: 'prod-2', variantSku: 'SVF-ONION-500G', quantity: 500, unit: 'g', label: '500g', price: 24, mrp: 30, stock: 120, isActive: true },
+      { id: 'var-2-2', productId: 'prod-2', variantSku: 'SVF-ONION-1KG', quantity: 1, unit: 'kg', label: '1kg', price: 44, mrp: 55, stock: 250, isActive: true },
+      { id: 'var-2-3', productId: 'prod-2', variantSku: 'SVF-ONION-2KG', quantity: 2, unit: 'kg', label: '2kg', price: 82, mrp: 105, stock: 90, isActive: true },
+      { id: 'var-2-4', productId: 'prod-2', variantSku: 'SVF-ONION-5KG', quantity: 5, unit: 'kg', label: '5kg', price: 198, mrp: 260, stock: 35, isActive: true },
+    ]
+  },
+  {
+    id: 'prod-3',
+    productSku: 'SVF-VEG-TOMATO',
+    name: 'Country Hybrid Tomato (ಟೊಮೆಟೊ)',
+    slug: 'country-hybrid-tomato',
+    description: 'Juicy, plump red tomatoes directly harvested from Mandya and Malur mandis. Rich in flavour and lycopene.',
+    category: 'Vegetables',
+    imageUrl: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80',
+    isActive: true,
+    createdAt: '2026-10-15T08:00:00.000Z',
+    updatedAt: '2026-10-15T08:00:00.000Z',
+    variations: [
+      { id: 'var-3-1', productId: 'prod-3', variantSku: 'SVF-TOMATO-500G', quantity: 500, unit: 'g', label: '500g', price: 19, mrp: 28, stock: 150, isActive: true },
+      { id: 'var-3-2', productId: 'prod-3', variantSku: 'SVF-TOMATO-1KG', quantity: 1, unit: 'kg', label: '1kg', price: 36, mrp: 50, stock: 220, isActive: true },
+      { id: 'var-3-3', productId: 'prod-3', variantSku: 'SVF-TOMATO-2KG', quantity: 2, unit: 'kg', label: '2kg', price: 68, mrp: 95, stock: 75, isActive: true },
+    ]
+  },
+  {
+    id: 'prod-4',
+    productSku: 'SVF-VEG-POTATO',
+    name: 'Hassan Fresh Potato (ಆಲೂಗಡ್ಡೆ)',
+    slug: 'hassan-fresh-potato',
+    description: 'Grade-1 golden potatoes from Hassan. Firm texture, uniform size, clean and unblemished.',
+    category: 'Vegetables',
+    imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600&auto=format&fit=crop&q=80',
+    isActive: true,
+    createdAt: '2026-10-15T08:00:00.000Z',
+    updatedAt: '2026-10-15T08:00:00.000Z',
+    variations: [
+      { id: 'var-4-1', productId: 'prod-4', variantSku: 'SVF-POTATO-500G', quantity: 500, unit: 'g', label: '500g', price: 22, mrp: 28, stock: 100, isActive: true },
+      { id: 'var-4-2', productId: 'prod-4', variantSku: 'SVF-POTATO-1KG', quantity: 1, unit: 'kg', label: '1kg', price: 39, mrp: 52, stock: 180, isActive: true },
+      { id: 'var-4-3', productId: 'prod-4', variantSku: 'SVF-POTATO-2KG', quantity: 2, unit: 'kg', label: '2kg', price: 74, mrp: 100, stock: 65, isActive: true },
+      { id: 'var-4-4', productId: 'prod-4', variantSku: 'SVF-POTATO-5KG', quantity: 5, unit: 'kg', label: '5kg', price: 175, mrp: 240, stock: 30, isActive: true },
+    ]
+  },
+  {
+    id: 'prod-5',
+    productSku: 'SVF-GREENS-CORIANDER',
+    name: 'Fresh Coriander Bunch (ಕೊತ್ತಂಬರಿ ಸೊಪ್ಪು)',
+    slug: 'fresh-coriander-bunch',
+    description: 'Fragrant, soil-free hydroponic-washed fresh green coriander with strong earthy aroma.',
+    category: 'Leafy Greens',
+    imageUrl: 'https://images.unsplash.com/photo-1588879462589-3ea970f0559a?w=600&auto=format&fit=crop&q=80',
+    isActive: true,
+    createdAt: '2026-10-15T08:00:00.000Z',
+    updatedAt: '2026-10-15T08:00:00.000Z',
+    variations: [
+      { id: 'var-5-1', productId: 'prod-5', variantSku: 'SVF-CORIANDER-1BUN', quantity: 1, unit: 'Bundle', label: '1 Bundle', price: 15, mrp: 22, stock: 120, isActive: true },
+      { id: 'var-5-2', productId: 'prod-5', variantSku: 'SVF-CORIANDER-2BUN', quantity: 2, unit: 'Bundle', label: '2 Bundles', price: 28, mrp: 40, stock: 80, isActive: true },
+      { id: 'var-5-3', productId: 'prod-5', variantSku: 'SVF-CORIANDER-250G', quantity: 250, unit: 'g', label: '250g Pack', price: 34, mrp: 48, stock: 50, isActive: true },
+    ]
+  },
+  {
+    id: 'prod-6',
+    productSku: 'SVF-FRU-BANANA',
+    name: 'Robusta Golden Banana (ಬಾಳೆಹಣ್ಣು)',
+    slug: 'robusta-golden-banana',
+    description: 'Naturally ripened Karnataka Robusta bananas. Sweet, energy-packed, and pesticide residue-free.',
+    category: 'Fruits',
+    imageUrl: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&auto=format&fit=crop&q=80',
+    isActive: true,
+    createdAt: '2026-10-15T08:00:00.000Z',
+    updatedAt: '2026-10-15T08:00:00.000Z',
+    variations: [
+      { id: 'var-6-1', productId: 'prod-6', variantSku: 'SVF-BANANA-500G', quantity: 500, unit: 'g', label: '500g (3-4 pcs)', price: 28, mrp: 35, stock: 90, isActive: true },
+      { id: 'var-6-2', productId: 'prod-6', variantSku: 'SVF-BANANA-1KG', quantity: 1, unit: 'kg', label: '1kg (7-8 pcs)', price: 52, mrp: 65, stock: 130, isActive: true },
+      { id: 'var-6-3', productId: 'prod-6', variantSku: 'SVF-BANANA-2KG', quantity: 2, unit: 'kg', label: '2kg', price: 99, mrp: 125, stock: 40, isActive: true },
+    ]
+  },
+  {
+    id: 'prod-7',
+    productSku: 'SVF-FRU-APPLE',
+    name: 'Shimla Royal Delicious Apple (ಸೇಬು)',
+    slug: 'shimla-royal-delicious-apple',
+    description: 'Crisp mountain apples from Himachal orchards. Sweet, juicy, and wax-free.',
+    category: 'Fruits',
+    imageUrl: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600&auto=format&fit=crop&q=80',
+    isActive: true,
+    createdAt: '2026-10-15T08:00:00.000Z',
+    updatedAt: '2026-10-15T08:00:00.000Z',
+    variations: [
+      { id: 'var-7-1', productId: 'prod-7', variantSku: 'SVF-APPLE-2PCS', quantity: 2, unit: 'pieces', label: '2 pieces', price: 65, mrp: 85, stock: 50, isActive: true },
+      { id: 'var-7-2', productId: 'prod-7', variantSku: 'SVF-APPLE-4PCS', quantity: 4, unit: 'pieces', label: '4 pieces Box', price: 125, mrp: 160, stock: 45, isActive: true },
+      { id: 'var-7-3', productId: 'prod-7', variantSku: 'SVF-APPLE-1KG', quantity: 1, unit: 'kg', label: '1kg', price: 175, mrp: 220, stock: 60, isActive: true },
+    ]
+  },
+  {
+    id: 'prod-8',
+    productSku: 'SVF-DAIRY-MILK',
+    name: 'Nandini Toned Fresh Milk (ನಂದಿನಿ ಹಾಲು)',
+    slug: 'nandini-toned-fresh-milk',
+    description: 'Karnataka’s favourite Nandini pasteurised toned milk. Wholesome nutrition for tea, coffee, and daily family health.',
+    category: 'Dairy',
+    imageUrl: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=600&auto=format&fit=crop&q=80',
+    isActive: true,
+    createdAt: '2026-10-15T08:00:00.000Z',
+    updatedAt: '2026-10-15T08:00:00.000Z',
+    variations: [
+      { id: 'var-8-1', productId: 'prod-8', variantSku: 'SVF-MILK-500ML', quantity: 500, unit: 'ml', label: '500ml Pouch', price: 23, mrp: 24, stock: 80, isActive: true },
+      { id: 'var-8-2', productId: 'prod-8', variantSku: 'SVF-MILK-1L', quantity: 1, unit: 'L', label: '1L (2x500ml)', price: 46, mrp: 48, stock: 70, isActive: true },
+    ]
+  },
+  {
+    id: 'prod-9',
+    productSku: 'SVF-DAIRY-CURD',
+    name: 'Nandini Thick Curd / Dahi (ಮೊಸರು)',
+    slug: 'nandini-thick-curd-dahi',
+    description: 'Thick, creamy, naturally fermented Nandini curd made from 100% pure cow milk.',
+    category: 'Dairy',
+    imageUrl: 'https://images.unsplash.com/photo-1571212515416-fef01fc43637?w=600&auto=format&fit=crop&q=80',
+    isActive: true,
+    createdAt: '2026-10-15T08:00:00.000Z',
+    updatedAt: '2026-10-15T08:00:00.000Z',
+    variations: [
+      { id: 'var-9-1', productId: 'prod-9', variantSku: 'SVF-CURD-200G', quantity: 200, unit: 'g', label: '200g Cup', price: 16, mrp: 18, stock: 65, isActive: true },
+      { id: 'var-9-2', productId: 'prod-9', variantSku: 'SVF-CURD-500G', quantity: 500, unit: 'g', label: '500g Pouch', price: 32, mrp: 35, stock: 95, isActive: true },
+      { id: 'var-9-3', productId: 'prod-9', variantSku: 'SVF-CURD-1KG', quantity: 1, unit: 'kg', label: '1kg Bucket', price: 65, mrp: 72, stock: 40, isActive: true },
+    ]
+  },
+  {
+    id: 'prod-10',
+    productSku: 'SVF-STAPLE-RICE',
+    name: 'Karnataka Sona Masoori Raw Rice (ಅಕ್ಕಿ)',
+    slug: 'karnataka-sona-masoori-raw-rice',
+    description: 'Aged 12+ months Tungabhadra river basin premium Sona Masoori rice. Fluffy, non-sticky, and lightweight grain.',
+    category: 'Staples',
+    imageUrl: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&auto=format&fit=crop&q=80',
+    isActive: true,
+    createdAt: '2026-10-15T08:00:00.000Z',
+    updatedAt: '2026-10-15T08:00:00.000Z',
+    variations: [
+      { id: 'var-10-1', productId: 'prod-10', variantSku: 'SVF-RICE-1KG', quantity: 1, unit: 'kg', label: '1kg Pack', price: 62, mrp: 75, stock: 150, isActive: true },
+      { id: 'var-10-2', productId: 'prod-10', variantSku: 'SVF-RICE-5KG', quantity: 5, unit: 'kg', label: '5kg Bag', price: 295, mrp: 360, stock: 80, isActive: true },
+      { id: 'var-10-3', productId: 'prod-10', variantSku: 'SVF-RICE-10KG', quantity: 10, unit: 'kg', label: '10kg Bag', price: 580, mrp: 710, stock: 45, isActive: true },
+    ]
+  },
+  {
+    id: 'prod-11',
+    productSku: 'SVF-STAPLE-TOORDAL',
+    name: 'Unpolished Karnataka Toor Dal (ತೊಗರಿ ಬೇಳೆ)',
+    slug: 'unpolished-karnataka-toor-dal',
+    description: 'Gulbarga GI-tag grade unpolished toor dal. Rich in plant protein, cooks faster with traditional aroma for authentic sambar.',
+    category: 'Staples',
+    imageUrl: 'https://images.unsplash.com/photo-1585994192701-f1a505c817ea?w=600&auto=format&fit=crop&q=80',
+    isActive: true,
+    createdAt: '2026-10-15T08:00:00.000Z',
+    updatedAt: '2026-10-15T08:00:00.000Z',
+    variations: [
+      { id: 'var-11-1', productId: 'prod-11', variantSku: 'SVF-TOORDAL-500G', quantity: 500, unit: 'g', label: '500g', price: 82, mrp: 105, stock: 110, isActive: true },
+      { id: 'var-11-2', productId: 'prod-11', variantSku: 'SVF-TOORDAL-1KG', quantity: 1, unit: 'kg', label: '1kg', price: 159, mrp: 195, stock: 140, isActive: true },
+      { id: 'var-11-3', productId: 'prod-11', variantSku: 'SVF-TOORDAL-2KG', quantity: 2, unit: 'kg', label: '2kg', price: 309, mrp: 385, stock: 55, isActive: true },
+    ]
+  },
+  {
+    id: 'prod-12',
+    productSku: 'SVF-STAPLE-OIL',
+    name: 'Sunrich Refined Sunflower Oil (ಸೂರ್ಯಕಾಂತಿ ಎಣ್ಣೆ)',
+    slug: 'sunrich-refined-sunflower-oil',
+    description: 'Enriched with Vitamin A & D. Light, non-greasy cooking oil ideal for high-temperature deep frying and daily South Indian dishes.',
+    category: 'Staples',
+    imageUrl: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=600&auto=format&fit=crop&q=80',
+    isActive: true,
+    createdAt: '2026-10-15T08:00:00.000Z',
+    updatedAt: '2026-10-15T08:00:00.000Z',
+    variations: [
+      { id: 'var-12-1', productId: 'prod-12', variantSku: 'SVF-OIL-1L', quantity: 1, unit: 'L', label: '1L Pouch', price: 135, mrp: 165, stock: 95, isActive: true },
+      { id: 'var-12-2', productId: 'prod-12', variantSku: 'SVF-OIL-5L', quantity: 5, unit: 'L', label: '5L Can', price: 655, mrp: 780, stock: 35, isActive: true },
+    ]
+  }
+];
