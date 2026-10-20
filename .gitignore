@@ -13,8 +13,9 @@
 # testing
 /coverage
 
-# next.js
-/.next/
+# next.js build cache (keep production build artifacts for Hostinger Git deployment)
+.next/cache/
+.next/diagnostics/
 /out/
 
 # production

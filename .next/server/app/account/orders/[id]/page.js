@@ -1,0 +1,13 @@
+var R=require("../../../../chunks/ssr/[turbopack]_runtime.js")("server/app/account/orders/[id]/page.js")
+R.c("server/chunks/ssr/[root-of-the-server]__03ac5u7-7x98b._.js")
+R.c("server/chunks/ssr/node_modules_next_dist_esm_build_templates_app-page_182-9h4a_pb0t.js")
+R.c("server/chunks/ssr/[root-of-the-server]__09uyumrx1klkt._.js")
+R.c("server/chunks/ssr/node_modules_next_dist_0janj0i6dqko7._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__180zwvu8eylf2._.js")
+R.c("server/chunks/ssr/node_modules_next_dist_client_components_0wpq8j32_ibz4._.js")
+R.c("server/chunks/ssr/node_modules_next_dist_client_components_builtin_forbidden_0symwr9mbf-fh.js")
+R.c("server/chunks/ssr/node_modules_next_dist_client_components_builtin_unauthorized_0l_sp0xky89qu.js")
+R.c("server/chunks/ssr/node_modules_next_dist_client_components_builtin_global-error_0q-w892nagajq.js")
+R.c("server/chunks/ssr/_next-internal_server_app_account_orders_[id]_page_actions_0-ug2i3dxj-yc.js")
+R.m(1293)
+module.exports=R.m(1293).exports
