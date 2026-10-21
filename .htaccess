@@ -1,8 +1,25 @@
-# Hostinger LiteSpeed / Apache Reverse Proxy to Node.js
+# SV Fresh Mart - Native PHP / LiteSpeed Apache Configuration
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteRule ^$ http://127.0.0.1:3000/ [P,L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^(.*)$ http://127.0.0.1:3000/$1 [P,L]
+  RewriteBase /
+
+  # Protect sensitive server directories from direct public access
+  RewriteRule ^data/ - [F,L]
+  RewriteRule ^includes/ - [F,L]
+  RewriteRule ^views/ - [F,L]
+
+  # Pass existing physical files and directories directly
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Route all clean application URLs through index.php
+  RewriteRule ^ index.php [L]
+</IfModule>
+
+# Security Headers
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set X-XSS-Protection "1; mode=block"
 </IfModule>
