@@ -1,4 +1,6 @@
 # SV Fresh Mart - Native PHP / LiteSpeed Apache Configuration
+DirectoryIndex index.php index.html index.htm
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
