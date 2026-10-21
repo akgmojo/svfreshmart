@@ -16,6 +16,7 @@
 # next.js build cache (keep production build artifacts for Hostinger Git deployment)
 .next/cache/
 .next/diagnostics/
+.next/server/route-cache/
 /out/
 
 # production
